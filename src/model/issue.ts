@@ -7,4 +7,5 @@ export class Issue {
 	public tag : String;
 	public lat : Number;
 	public lon : Number;
+	public acc : Number;
 };

@@ -4,7 +4,7 @@
 
 import express from "express";
 import bodyParser from "body-parser";
-import * as notifications from "./controllers/v1/notifications_controller";
+import * as issues from "./controllers/v1/issues_controller";
 import * as firebase from "firebase";
 
 const app = express();
@@ -22,8 +22,7 @@ firebase.initializeApp({
 app.set('port', 3500);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-//app.set('firebase', fireb);
 
-app.post('/v1/notifications/create', notifications.createNotification);
+app.post('/v1/issues/create', issues.createIssue);
 
 export default app;
