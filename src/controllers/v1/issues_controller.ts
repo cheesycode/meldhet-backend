@@ -42,7 +42,8 @@ export let getByUserId = (req: Request, res: Response, next: NextFunction) => {
 		var data : Array<any> = new Array<any>();
 
 		Object.keys(obj).forEach(function(k) {
-			const value = obj[k];
+			var value = obj[k];
+			value.id = k;
 			data.push(value);
 		});
 
