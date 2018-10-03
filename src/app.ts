@@ -5,7 +5,8 @@
 import express from "express";
 import bodyParser from "body-parser";
 import * as issues from "./controllers/v1/issues_controller";
-import * as firebase from "firebase";
+import firebase from "firebase";
+import * as messages from "./controllers/v1/messages_controller";
 
 const app = express();
 
@@ -23,6 +24,9 @@ app.set('port', 3500);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.get('/v1/issues/get', issues.getByUserId);
 app.post('/v1/issues/create', issues.createIssue);
+app.post('/v1/messages/create', messages.createMessage);
+app.post('/v1/messages/getall', messages.getByIssue);
 
 export default app;
