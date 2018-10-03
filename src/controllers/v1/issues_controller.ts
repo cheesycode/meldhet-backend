@@ -13,7 +13,7 @@ export let createIssue = (req: Request, res: Response, next: NextFunction) => {
 		lat: req.body.lat,
 		lon: req.body.lon,
 		acc: req.body.acc,
-		image: req.body.acc,
+		image: req.body.image,
 		tag: req.body.tag
 	});
 
