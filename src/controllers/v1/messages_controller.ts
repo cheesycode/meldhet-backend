@@ -8,6 +8,53 @@ import { Response, Request, NextFunction } from "express";
 import firebase, { database } from 'firebase';
 import { Message } from "../../model/message";
 import * as url from 'url';
+import app from '../../app';
+
+export let createMessageCommunity = (req: Request, res: Response, next: NextFunction) => {
+	let msg = new Message();
+
+	msg.issue = req.body.issue;
+	msg.sender = req.body.sender;
+	msg.body = req.body.body;
+	msg.recipient = req.body.recipient;
+
+	var ref = firebase.database().ref('messages/');
+	const date = new Date();
+
+	var fcm = app.get('fcm');
+	const notification = {
+		to: msg.recipient,
+		notification: {
+			title: 'Meld Het!',
+			body: msg.body
+		},
+
+		data: {
+			issue: msg.issue,
+			sender: msg.sender
+		}
+	};
+
+	fcm.send(notification, function(err : any, response : any) {
+		if(err) {
+			console.log('Unable to send notification:');
+			console.log(err);
+		} else {
+			console.log('Notification sent!');
+		}
+	})
+
+	ref.push({
+		issue: msg.issue,
+		sender: msg.sender,
+		body: msg.body,
+		recipient: msg.recipient,
+		created_at: date.valueOf()
+	});
+
+	res.json({ok: true});
+	next();
+}
 
 export let createMessage = (req: Request, res: Response, next: NextFunction) => {
 	let msg = new Message();
