@@ -5,13 +5,6 @@ import { Response, Request, NextFunction } from "express";
 import firebase from 'firebase';
 import * as url from 'url';
 
-function mapToJson(map : Map<string, any>) {
-    return JSON.stringify([...map]);
-}
-function jsonToMap(jsonStr : string) {
-    return new Map(JSON.parse(jsonStr));
-}
-
 export let createIssue = (req: Request, res: Response, next: NextFunction) => {
 	console.log('Latitude: ' +  req.body.lat);
 	console.log('Longitude: ' + req.body.lon);
