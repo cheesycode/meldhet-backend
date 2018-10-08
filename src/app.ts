@@ -26,7 +26,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/v1/issues/get', issues.getByUserId);
 app.post('/v1/issues/create', issues.createIssue);
+
 app.post('/v1/messages/create', messages.createMessage);
-app.post('/v1/messages/getall', messages.getByIssue);
+app.get('/v1/messages/getall', messages.getByIssue);
 
 export default app;

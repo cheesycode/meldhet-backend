@@ -25,7 +25,8 @@ export let createIssue = (req: Request, res: Response, next: NextFunction) => {
 		acc: req.body.acc,
 		image: req.body.image,
 		tag: req.body.tag,
-		creator: req.body.id
+		creator: req.body.id,
+		status: 'open'
 	});
 
 	res.json({ok: true})
@@ -44,7 +45,8 @@ export let getByUserId = (req: Request, res: Response, next: NextFunction) => {
 		Object.keys(obj).forEach(function(k) {
 			var value = obj[k];
 			value.id = k;
-			data.push(value);
+			if(value.status != 'closed')
+				data.push(value);
 		});
 
 		res.json(data);

@@ -7,4 +7,6 @@ export class Message {
 	public recipient : String;
 	public sender : String;
 	public issue : String;
+	public id : String;
+	public created_at : Number;
 };

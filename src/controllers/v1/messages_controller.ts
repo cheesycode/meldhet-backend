@@ -7,6 +7,7 @@
 import { Response, Request, NextFunction } from "express";
 import firebase, { database } from 'firebase';
 import { Message } from "../../model/message";
+import * as url from 'url';
 
 export let createMessage = (req: Request, res: Response, next: NextFunction) => {
 	let msg = new Message();
@@ -17,29 +18,45 @@ export let createMessage = (req: Request, res: Response, next: NextFunction) => 
 	msg.recipient = req.body.recipient;
 
 	var ref = firebase.database().ref('messages/');
+	const date = new Date();
 
 	ref.push({
 		issue: msg.issue,
 		sender: msg.sender,
 		body: msg.body,
-		recipient: msg.recipient
+		recipient: msg.recipient,
+		created_at: date.valueOf()
 	});
-
-	//let db = firebase.database().ref('issues');
-	/*db.orderByChild("tag").equalTo("Kapot").on("child_added", function(snapshot) {
-		console.log(snapshot.key + ': ' + snapshot.val().lat);
-	});*/
 
 	res.json({ok: true});
 	next();
 };
 
 export let getByIssue = (req: Request, res: Response, next: NextFunction) => {
+	const parts = url.parse(req.url, true);
 	var db = firebase.database().ref('messages');
-	db.orderByChild("issue").equalTo(req.body.issue).on("child_added", (snapshot) => {
-		console.log(JSON.stringify(snapshot.val()));
-	});
+	const issue = parts.query.issue as string;
 
-	res.json({ok: true});
-	next();
+	db.orderByChild("issue").equalTo(issue).once("value").then((snapshot) => {
+		const obj = snapshot.val();
+		var data = new Array<Message>();
+
+		Object.keys(obj).forEach((k) => {
+			var msg = obj[k] as Message;
+			msg.id = k;
+			data.push(msg);
+		});
+
+		data.sort(function (a: Message, b: Message) : number {
+			const a_val = a.created_at as number;
+			const b_val = b.created_at as number;
+			return a_val - b_val;
+		})
+
+		res.json(data);
+		next();
+	}).catch((error) => {
+		console.log(error);
+		next();
+	})
 };
