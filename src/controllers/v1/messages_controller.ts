@@ -24,12 +24,10 @@ export let createMessageCommunity = (req: Request, res: Response, next: NextFunc
 	var fcm = app.get('fcm');
 	const notification = {
 		to: msg.recipient,
-		notification: {
-			title: 'Meld Het!',
-			body: msg.body
-		},
 
 		data: {
+			title: 'Meld Het!',
+			body: msg.body,
 			issue: msg.issue,
 			sender: msg.sender
 		}
