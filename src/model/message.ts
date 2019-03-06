@@ -1,5 +1,5 @@
 /*
- * Chat message model
+ * Chat message model.
  */
 
 export class Message {
